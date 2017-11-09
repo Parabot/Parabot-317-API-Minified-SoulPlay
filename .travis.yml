@@ -1,7 +1,7 @@
 language: java
 
 jdk:
-  - oraclejdk7
+  - openjdk7
   - oraclejdk8
 
 before_install:
@@ -19,7 +19,7 @@ after_deploy: "./.travis/call-creation.sh"
 notifications:
   email: false
   slack:
-    secure: osWX769z0hSVPbeF1ZHSENgR4i+VKFTMGFNIV02RhvZ4a1BXsGUG5VCCDYUoBzWPCA5avJHg+FrN7nEEaoIjc5/qqFmZFGwOitZJsOzvR8C18QcgyuEX+35U4eQF4h5ITpruvwNNQ/7hIWyPl/fEPcAswHFDAccEb5iRNJeFNeM=
+    secure: bMzTOubxfHZl34ns70tWMvbpQVH5aUq9dnJ/5uqRodUN3IugrLvNa9jyRdqchL8jnSUj5IYLyEF+gq1VJO0BdHeA5CZuxJmyJDqhpANZKHuSLqYc7hCbiBZOmpcG2LtGJCCjWFgBiWq+0I141laT1jEuzU9G7nAcjETq4KUOvPnk8/TJ1Qg8zvnYD34PV4ztk2ZICiYimjgNqknlolQ/b7S9zQmoP7LFr9JchWIZyYNYm5qQLNuGfQDNOQLdUhRSLdhISWu4zDFCQS78aKMen3WvFlNv2+FB+mj4pH+K4K/uTmcuUkp00XgKf5+4T5Ciwa9jokzyFEjGpJkfVwANzw3nsBd4bfqvNjNeU77Wgf5UOkHnNI0l4x5klGXyU6nQKE3ii7nStbZBmdw3NFS3zTDowRGbKKrGMU9VGwHrP2k1tYirqUMK8SasGj/JZ20wALpwoBeM9+8diAV6+mQ3rS46gSLwYzflcc7M/LzWgzvJ86Sy6w8vnzjtJOFEKvDSvZbnHqFVDx3fZ0s1R4kBjRUmc/njxnPtIILhqjvFQxGu6/CBQKHyN8YieCivW5eg9GRCPgDZSESONn6qlqIvu7HEIRC2cUJhcHd697USGHmYPYEk/tvUhBIygboJZepNQrE/BUU1AsrhSn6rJSuOH1WG6buXbt4AoBiJwnFWOl0=
   webhooks:
     on_success: always
     on_failure: always
@@ -27,7 +27,7 @@ notifications:
 
 env:
   global:
-    - PROVIDER_VERSION=1.21.3
+    - PROVIDER_VERSION=1.0.1
 
 cache:
   directories:
@@ -38,26 +38,17 @@ deploy:
   - provider: s3
     access_key_id: AKIAJDZLZNH2PIKHUKOA
     secret_access_key:
-      secure: Opk2uGg0CyBIeqDX5EIu6UBRjaxjZwfNVNsjGbsA8QWjIu2zIUwFe1ZWJEkqzF5jqrN8ykgHw74ofrgZyBKH2nhGn7MN4wWWktKN4iIeq2D6gf8Cq31tzZcpgEfUaJnARXtu0jjCKag2PqglQAEc/OgVEeEFuUapJ0I4ITDZWbk=
+      secure: LcS1dq0MtW4VIczNe4tGkxTPSg2DBDydBOO98hUhDG+/BdQ3GUTX77jyyG6IL2hqqM5/diInw71qZdYWyAJIMAu0uSA7SrTp/yzBhJFCegquAqbBXbSLFqV9IvyDX22nloUsH7/ZZGFfEZ7T+EjuF+9UYBITgeuohWlKiEWbuUJmECmvx7syG/H7G/tWs89vcyRXjn0cGIw1h+r3dGtSCLt0W2B7vo8SvSH8LpMS49sgpNsEahvS3wgWhXXX+tEwiclngef46MBYcnyrtDHwQM5C83Qq9iYITEZTGHCibTy1T7BlnMqDlwCgHCYB3EDhft+gWppKnSRFZi9mCelbJVXozmjvPybA0W3mjzntszgvAQ5t26L214S7yNZpfaUltB9XW2D94p+y6QmWldMyIaEfswmGAs+h52Gp3dnovVOsS7e515NUvWoFFnH7mmPhAcnxUjnOTw9jJ2HUnVS72Bi+cCMo+RPGP9tNoNaKGxXSqRvG7E5UGyaPvOh2J4ogmrBqrnrK5cB/ho6+gNNu0YirwJzzujgln4kPxjZU1R0TpiAhiadfWytPduilY6r2BA94UwnZEsRUNvsJFOI/eyWa2E+RdDi0fvDg5nUxWoi2Nr+jOXyMab8vS+AzNWI6Khp1pA6M7dnwmfwCSlFHgLLhxNvt8O8JzckP+JtqkRA=
     bucket: parabot
     skip_cleanup: true
     local-dir: "./target/final/"
-    upload-dir: "artifacts/provider"
+    upload-dir: artifacts/soulplay-provider
     region: us-west-1
     detect_encoding: true
     acl: public_read
     on:
-      repo: Parabot/Parabot-317-API-Minified
+      repo: Parabot/Parabot-317-API-Minified-SoulPlay
       branch:
         - master
         - development
-      jdk: 'oraclejdk7'
-
-  - provider: script
-    script: "cp ./.travis/.travis.settings.xml $HOME/.m2/settings.xml && mvn package javadoc:javadoc deploy site:deploy"
-    skip_cleanup: true
-    on:
-      repo: Parabot/Parabot-317-API-Minified
-      branch:
-        - master
-      jdk: 'oraclejdk7'
+      jdk: 'openjdk7'

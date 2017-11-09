@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.parabot</groupId>
-    <artifactId>317-api-minified</artifactId>
-    <version>1.21.3</version>
-    <name>Parabot 317-API-Minified</name>
+    <artifactId>317-api-minified-soulplay</artifactId>
+    <version>1.0.1</version>
+    <name>Parabot 317-API-Minified SoulPlay</name>
 
     <licenses>
         <license>
@@ -52,7 +52,7 @@
     </dependencies>
 
     <build>
-        <finalName>Provider-V${version}${build.version}</finalName>
+        <finalName>SoulPlay-Provider-V${version}${build.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
