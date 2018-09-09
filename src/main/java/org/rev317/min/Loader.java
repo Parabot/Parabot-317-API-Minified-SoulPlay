@@ -8,6 +8,9 @@ import org.parabot.core.asm.adapters.AddInterfaceAdapter;
 import org.parabot.core.asm.hooks.HookFile;
 import org.parabot.core.desc.ServerProviderInfo;
 import org.parabot.core.reflect.RefClass;
+import org.parabot.core.reflect.RefField;
+import org.parabot.core.reflect.RefMethod;
+import org.parabot.core.ui.components.GamePanel;
 import org.parabot.core.ui.components.VerboseLoader;
 import org.parabot.environment.api.utils.Time;
 import org.parabot.environment.api.utils.WebUtil;
@@ -21,11 +24,13 @@ import org.rev317.min.ui.BotMenu;
 
 import javax.swing.*;
 import java.applet.Applet;
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 
 /**
  * @author Everel, JKetelaar
+ * Revamped loader for SoulPlay 2018 by Shadowrs & EmmaStone
  */
 @ServerManifest(author = "Everel & JKetelaar", name = "Server name here", type = Type.INJECTION, version = 2.1)
 public class Loader extends ServerProvider {
@@ -42,35 +47,46 @@ public class Loader extends ServerProvider {
             final ASMClassLoader classLoader = context.getASMClassLoader();
             final Class<?> clientClass = classLoader.loadClass(Context.getInstance().getServerProviderInfo().getClientClass());
 
-            RefClass frameClass = new RefClass(classLoader.loadClass("com/soulplayps/client/ys"));
-            final Object instance = clientClass.newInstance();
-
-
-            frameClass.getMethod("main").invoke(new Object[]{new String[]{}});
-            final JFrame frame = (JFrame)frameClass.getField("try").asObject();
-
-
+            clientClass.getMethod("main", new Class[] {String[].class}).invoke(null, new Object[] {new String[]{ }});
 
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (true) {
-                        if (frame.isVisible()) {
-                            System.out.println("Disposing the extra frame");
-                            frame.dispose();
-                            break;
+                    int i = 0;
+                    while (i++ < 100) {
+                        try {
+                            RefField clientInstance = new RefClass(classLoader.loadClass(Context.getInstance().getServerProviderInfo().getClientClass())).getField("CE");
+                            if (clientInstance.asObject() != null) {
+                                RefClass       appletClass = new RefClass(classLoader.loadClass("iiIIIIiiiiiIIii"), clientInstance.asObject());
+                                final RefField refField    = appletClass.getField("import");
+                                if (refField.asObject() != null) {
+                                    JFrame frame = (JFrame) refField.asObject();
+                                    if (frame.isVisible()) {
+                                        System.out.println("Disposing the extra frame");
+                                        frame.dispose();
+                                        Context.getInstance().setClientInstance(clientInstance.asObject());
+                                        final RefField canvasField = appletClass.getField("public");
+                                        GamePanel      panel       = GamePanel.getInstance();
+                                        Applet         applet      = (Applet) Context.getInstance().getClient();
+
+                                        panel.add((Component) canvasField.asObject());
+                                        applet.repaint();
+                                        appletClass.getMethod("false").invoke();
+                                        appletClass.getMethod("true").invoke();
+                                        applet.paintAll(applet.getGraphics());
+                                        break;
+                                    }
+                                }
+                            }
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
                         }
-                        Time.sleep(10);
+                        Time.sleep(200);
                     }
                 }
             }).start();
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return (Applet) instance;
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
 
