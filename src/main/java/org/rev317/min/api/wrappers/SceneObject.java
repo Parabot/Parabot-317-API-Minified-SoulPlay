@@ -10,6 +10,7 @@ import org.rev317.min.api.methods.SceneObjects;
 
 /**
  * @author Everel
+ * Custom code is getId() returns a hook instead of Hash>>14
  */
 public class SceneObject implements Locatable {
     public static final int TYPE_WALL             = 0; // object1
@@ -69,8 +70,8 @@ public class SceneObject implements Locatable {
      */
     public final int getId() {
         return accessor.getId();
-
     }
+
     /**
      * Gets this object's type
      *
